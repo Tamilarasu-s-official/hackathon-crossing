@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accessibility VR - Road Crossing Simulation</title>
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 0;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .vr-container {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            height: 500px;
+        }
+        
+        .info-panel {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+        
+        h2 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+            padding-bottom: 10px;
+        }
+        
+        p {
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 40px 0;
+        }
+        
+        .feature-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .controls {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            background: linear-gradient(to right, #3498db, #2ecc71);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin: 10px 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        @media (max-width: 900px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Accessibility VR Experience</h1>
+            <p class="subtitle">An immersive road crossing simulation designed for people with physical disabilities to practice real-world scenarios safely</p>
+        </header>
+        
+        <div class="content">
+            <div class="vr-container">
+                <a-scene embedded>
+                    <!-- Brighter Sky -->
+                    <a-sky color="#a3d9ff"></a-sky>
+
+                    <!-- Ambient light for better illumination -->
+                    <a-light type="ambient" color="#fff" intensity="0.7"></a-light>
+
+                    <!-- Directional light simulating sunlight -->
+                    <a-light type="directional" color="#fff" intensity="0.8" position="2 5 3"></a-light>
+
+                    <!-- Ground -->
+                    <a-plane position="0 0 0" rotation="-90 0 0" width="30" height="30" color="#7cb342"></a-plane>
+
+                    <!-- Road -->
+                    <a-plane position="0 0.01 -5" rotation="-90 0 0" width="8" height="20" color="#5a5a5a"></a-plane>
+
+                    <!-- Car Lane -->
+                    <a-plane position="0 0.02 -5" rotation="-90 0 0" width="6" height="20" color="#333"></a-plane>
+                    <a-text value="Car Lane" position="0 0.5 -5" color="red" align="center"></a-text>
+
+                    <!-- Lane markings -->
+                    <a-box position="0 0.03 -10" depth="0.1" height="0.05" width="0.2" color="white"></a-box>
+                    <a-box position="0 0.03 -5" depth="0.1" height="0.05" width="0.2" color="white"></a-box>
+                    <a-box position="0 0.03 0" depth="0.1" height="0.05" width="0.2" color="white"></a-box>
+                    <a-box position="0 0.03 5" depth="0.1" height="0.05" width="0.2" color="white"></a-box>
+
+                    <!-- Sidewalks with accessibility ramps -->
+                    <a-plane position="0 0.02 -15" rotation="-90 0 0" width="10" height="5" color="#d3d3d3"></a-plane>
+                    <a-plane position="0 0.02 5" rotation="-90 0 0" width="10" height="5" color="#d3d3d3"></a-plane>
+                    
+                    <!-- Accessibility ramps -->
+                    <a-box position="-3 0.1 -12.5" width="2" height="0.2" depth="1" color="#888" rotation="-90 0 0"></a-box>
+                    <a-box position="3 0.1 -12.5" width="2" height="0.2" depth="1" color="#888" rotation="-90 0 0"></a-box>
+                    <a-box position="-3 0.1 2.5" width="2" height="0.2" depth="1" color="#888" rotation="-90 0 0"></a-box>
+                    <a-box position="3 0.1 2.5" width="2" height="0.2" depth="1" color="#888" rotation="-90 0 0"></a-box>
+
+                   <!-- ========== TEA SHOPS IN RESERVED AREAS ========== -->
+<!-- First Tea Shop in Left Reserved Area -->
+<a-entity 
+  gltf-model="{{ url_for('static', filename='models/Tea blender 2.glb') }}"
+  position="-8 0 -5" 
+  scale="0.1 0.1 0.1"
+  rotation="0 0 0">
+</a-entity>
+
+<!-- Second Tea Shop in Plaza Area -->
+<a-entity 
+  gltf-model="{{ url_for('static', filename='models/Tea blender 3 green.glb') }}"
+  position="-8 0 2" 
+  scale="0.1 0.1 0.1"
+  rotation="0 0 0">
+</a-entity>
+<!-- ========== END TEA SHOPS ========== -->
+<!-- Realistic Street Light 2 - FIXED -->
+<a-entity position="5 0 0">
+    <a-cylinder position="0 3 0" radius="0.1" height="6" color="#333" metalness="0.7" roughness="0.3"></a-cylinder>
+    <a-box position="0 6 0" width="0.8" height="0.2" depth="0.8" color="#555" metalness="0.8" roughness="0.2"></a-box>
+    <a-cylinder position="0 6.2 0" radius="0.15" height="0.5" color="#888" metalness="0.9"></a-cylinder>
+    <a-sphere position="0 6.7 0" radius="0.3" color="#ffffcc" emissive="#ffffcc" emissive-intensity="2"></a-sphere>
+    <a-light type="point" intensity="0.8" color="#ffffcc" distance="8" position="0 6.7 0"></a-light>
+</a-entity>
+                    <!-- Person walking across road -->
+                    <a-entity id="person" position="0 0 -15">
+                        <!-- Body -->
+                        <a-box position="0 1 0" depth="0.6" height="1.5" width="0.6" color="blue"></a-box>
+                        <!-- Head -->
+                        <a-sphere position="0 2.2 0" radius="0.5" color="peachpuff"></a-sphere>
+                        <!-- Hands -->
+                        <a-cylinder position="-0.6 1 0" radius="0.1" height="1" rotation="0 0 90" color="peachpuff"></a-cylinder>
+                        <a-cylinder position="0.6 1 0" radius="0.1" height="1" rotation="0 0 90" color="peachpuff"></a-cylinder>
+                        <!-- Legs -->
+                        <a-cylinder position="-0.3 0.2 0" radius="0.15" height="1" color="black"></a-cylinder>
+                        <a-cylinder position="0.3 0.2 0" radius="0.15" height="1" color="black"></a-cylinder>
+                    </a-entity>
+
+                    <!-- ========== CAR - MOVES PERPENDICULAR TO PERSON ========== -->
+<a-entity id="car"
+    gltf-model="{{ url_for('static', filename='models/Car prototype nr.glb') }}"
+    position="100 100 100"  
+    scale="0.5 0.5 0.5"
+    rotation="0 90 0">
+</a-entity>
+
+                    <!-- Camera -->
+                    <a-entity position="0 8 14">
+                        <a-camera></a-camera>
+                    </a-entity>
+                </a-scene>
+            </div>
+            
+            <div class="info-panel">
+                <h2>About This Simulation</h2>
+                <p>This VR experience is designed to help people with physical disabilities practice crossing roads in a safe, controlled environment. The simulation includes realistic elements like:</p>
+                
+                <ul>
+                    <li>Accessibility ramps on sidewalks</li>
+                    <li>Wheelchair-friendly pathways</li>
+                    <li>Controlled traffic patterns</li>
+                    <li>Accessible public spaces with tables and chairs</li>
+                    <li>Realistic street lighting for visibility</li>
+                </ul>
+                
+                <p>Users can practice navigating this environment to build confidence and skills for real-world situations without physical risk.</p>
+                
+                <h2>How It Helps</h2>
+                <p>For people with mobility challenges, everyday tasks like crossing a road can present significant obstacles. This simulation allows users to:</p>
+                
+                <ul>
+                    <li>Practice timing when to cross with moving traffic</li>
+                    <li>Learn to navigate accessibility features like ramps</li>
+                    <li>Gain confidence in a risk-free environment</li>
+                    <li>Develop spatial awareness in crowded areas</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="features">
+            <div class="feature-card">
+                <div class="feature-icon">♿</div>
+                <h3>Wheelchair Accessible</h3>
+                <p>Designed with wheelchair users in mind, featuring ramps and spacious pathways</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">👁️</div>
+                <h3>Visual Impairment Support</h3>
+                <p>High contrast elements and clear signage for those with visual impairments</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">🔄</div>
+                <h3>Adaptive Difficulty</h3>
+                <p>Adjustable traffic patterns and obstacles based on user ability</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>Progress Tracking</h3>
+                <p>Monitor improvement over time with performance metrics</p>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <h2>Simulation Controls</h2>
+            <p>Use these controls to interact with the simulation:</p>
+            
+            <button class="btn" id="startBtn">Start Simulation</button>
+            <button class="btn" id="pauseBtn">Pause</button>
+            <button class="btn" id="resetBtn">Reset</button>
+            <button class="btn">Adjust Difficulty</button>
+            <button class="btn">Toggle Accessibility Features</button>
+            
+            <p style="margin-top: 20px;">For VR headset users: Use your controller to navigate the environment. Look around to change your viewpoint.</p>
+        </div>
+    </div>
+    
+    <footer>
+        <p>Accessibility VR Experience © 2023 | Designed for DSMN 4 Hackathon</p>
+        <p>This prototype focuses on creating inclusive environments for people with physical disabilities</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Wait for A-Frame to initialize
+            const scene = document.querySelector('a-scene');
+            
+            scene.addEventListener('loaded', function() {
+                // Get references to the person and car
+                const person = document.querySelector('#person');
+                const car = document.querySelector('#car');
+                
+                // Set initial positions
+                person.setAttribute('position', '0 0 -15');
+                car.setAttribute('position', '-10 0.0001 0');
+                car.setAttribute('rotation', '0 90 0');
+                
+                // Animation variables
+                let personSpeed = 0.03;
+                let carSpeed = 0.05;
+                let carDirection = 1; // 1 for right, -1 for left
+                let animationId = null;
+                let isRunning = false;
+                
+                // Control buttons
+                const startBtn = document.getElementById('startBtn');
+                const pauseBtn = document.getElementById('pauseBtn');
+                const resetBtn = document.getElementById('resetBtn');
+                
+                // Function to calculate distance between person and car
+                function calculateDistance() {
+                    const personPos = person.getAttribute('position');
+                    const carPos = car.getAttribute('position');
+                    
+                    const dx = personPos.x - carPos.x;
+                    const dz = personPos.z - carPos.z;
+                    return Math.sqrt(dx * dx + dz * dz);
+                }
+                
+                // Animation function
+                function animate() {
+                    if (!isRunning) return;
+                    
+                    // Get current positions
+                    const personPos = person.getAttribute('position');
+                    const carPos = car.getAttribute('position');
+                    
+                    // Calculate distance between person and car
+                    const distance = calculateDistance();
+                    
+                    // Move person forward if they're more than 2 units away from car
+                    if (distance > 2 && personPos.z < 5) {
+                        person.setAttribute('position', {
+                            x: personPos.x,
+                            y: personPos.y,
+                            z: personPos.z + personSpeed
+                        });
+                    }
+                    
+                    // Move car along X-axis
+                    const newCarX = carPos.x + (carSpeed * carDirection);
+                    car.setAttribute('position', {
+                        x: newCarX,
+                        y: carPos.y,
+                        z: carPos.z
+                    });
+                    
+                    // Change car direction when it reaches boundaries
+                    if (newCarX > 10) {
+                        carDirection = -1;
+                        car.setAttribute('rotation', '0 -90 0');
+                    } else if (newCarX < -10) {
+                        carDirection = 1;
+                        car.setAttribute('rotation', '0 90 0');
+                    }
+                    
+                    // Continue animation
+                    animationId = requestAnimationFrame(animate);
+                }
+                
+                // Start animation
+                startBtn.addEventListener('click', function() {
+                    if (!isRunning) {
+                        isRunning = true;
+                        animate();
+                    }
+                });
+                
+                // Pause animation
+                pauseBtn.addEventListener('click', function() {
+                    isRunning = false;
+                    if (animationId) {
+                        cancelAnimationFrame(animationId);
+                    }
+                });
+                
+                // Reset animation
+                resetBtn.addEventListener('click', function() {
+                    isRunning = false;
+                    if (animationId) {
+                        cancelAnimationFrame(animationId);
+                    }
+                    
+                    // Reset positions
+                    person.setAttribute('position', '0 0 -15');
+                    car.setAttribute('position', '10 1 0');
+                    car.setAttribute('rotation', '0 90 0');
+                    carDirection = 1;
+                });
+                
+                // Start animation automatically
+                isRunning = true;
+                animate();
+            });
+        });
+    </script>
+</body>
+</html>
